@@ -1,0 +1,4 @@
+[Project]
+Name=sms_gateway
+Manager=KDevCMakeManager
+VersionControl=kdevgit
