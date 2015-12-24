@@ -1,3 +1,7 @@
+# Folders
+build/
+tests/build/
+
 # Compiled Object files
 *.slo
 *.lo
