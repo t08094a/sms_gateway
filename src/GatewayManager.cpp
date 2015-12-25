@@ -18,8 +18,8 @@
  *
  */
 
-#include "../include/GatewayManager.h"
-#include "../include/GatewayFactory.h"
+#include "GatewayManager.h"
+#include "GatewayFactory.h"
 
 GatewayManager::GatewayManager()
 {

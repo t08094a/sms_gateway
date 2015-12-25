@@ -2,7 +2,7 @@
 
 
 #include <boost/test/unit_test.hpp>
-#include "../include/SmsTradeGateway.h"
+#include "SmsTradeGateway.h"
 
 using namespace boost::unit_test;
 using namespace std;

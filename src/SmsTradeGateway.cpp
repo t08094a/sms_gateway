@@ -18,9 +18,9 @@
  *
  */
 
-#include "../include/SmsTradeGateway.h"
-#include "../soap/SmsTrade/SmstradeBinding.nsmap" // get the gSOAP-generated namespace bindings
-#include "../soap/SmsTrade/soapSmstradeBindingProxy.h"
+#include "SmsTradeGateway.h"
+#include "SmstradeBinding.nsmap" // get the gSOAP-generated namespace bindings
+#include "soapSmstradeBindingProxy.h"
 
 const string SmsTradeGateway::name = "smstrade";
 

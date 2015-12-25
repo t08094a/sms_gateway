@@ -19,8 +19,8 @@
  */
 
 #include <exception>
-#include "../include/GatewayFactory.h"
-#include "../include/SmsTradeGateway.h"
+#include "GatewayFactory.h"
+#include "SmsTradeGateway.h"
 
 GatewayFactory::GatewayFactory()
 {
