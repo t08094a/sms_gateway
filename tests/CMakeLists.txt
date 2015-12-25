@@ -62,4 +62,4 @@ file(GLOB SMSTRADE_SRC_FILES soap/SmsTrade/*.nsmap soap/SmsTrade/*.cpp)
 
 add_executable(${PROJECT_NAME}_SmsTradeGateway TestRunner.cpp SmsTradeGatewayTest.cpp ${SMSTRADE_SRC_FILES}) 
 target_link_libraries(${PROJECT_NAME}_SmsTradeGateway PRIVATE sms_gateway ${Boost_LIBRARIES} ${GSOAP_LIBRARIES} ${GSOAP_SSL_LIBRARIES})
-add_test(NAME ParserUtility COMMAND ${PROJECT_NAME}_SmsTradeGateway)
+add_test(NAME SmsTradeGateway COMMAND ${PROJECT_NAME}_SmsTradeGateway)

@@ -3,7 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include "../include/SmsTradeGateway.h"
-// 
+
 using namespace boost::unit_test;
 using namespace std;
 
@@ -11,9 +11,9 @@ using namespace std;
 BOOST_AUTO_TEST_CASE( GetNameReturnsSmstrade )
 {
     string expected = "smstrade";
-//     
+    
     SmsTradeGateway gateway;
-//     string name = gateway.GetName();
-//     
-//     BOOST_CHECK(expected == name);
+    string name = gateway.GetName();
+    
+    BOOST_CHECK(expected == name);
 }
