@@ -1,0 +1,65 @@
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+
+#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/CMakeModules")
+
+# Set options for this project
+set (PROJECT_NAME "sms_gateway_test" CXX)
+project(${PROJECT_NAME})
+
+message(STATUS "============================")
+message(STATUS "Project: ${PROJECT_NAME}")
+message(STATUS "============================")
+
+set (PROJECT_SOURCE_DECLARATION_DIRECTORY ${PROJECT_SOURCE_DIR})
+set (PROJECT_SOURCE_DEFINITION_DIRECTORY ${PROJECT_SOURCE_DIR})
+
+set(CMAKE_BUILD_TYPE Debug)
+message( STATUS "CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}" )
+
+add_definitions(-std=c++11)
+
+enable_testing()
+
+#set(Boost_USE_STATIC_LIBS ON)
+
+# Load settings for the external project "Boost".
+# The components "system" and "filesystem" from "Boost" version 1.55.0 or
+# greater are required.
+find_package( Boost 1.55.0 REQUIRED COMPONENTS log regex date_time system filesystem unit_test_framework )
+if (Boost_FOUND)
+    # From the offical documentation:
+    # Add include directories to the build. [...] If the SYSTEM option is given,
+    # the compiler will be told the directories are meant as system include
+    # directories on some platforms (signalling this setting might achieve effects
+    # such as the compiler skipping warnings [...])."
+    include_directories (SYSTEM ${Boost_INCLUDE_DIR})
+
+    message(STATUS "The Boost version: ${Boost_VERSION}")
+    message(STATUS "The Boost include directory: ${Boost_INCLUDE_DIR}")
+    message(STATUS "The Boost libraries: ${Boost_LIBRARIES})")
+    
+    # From the offical documentation:
+    # "Specify directories in which the linker will look for libraries. [...] Note
+    # that this command is rarely necessary. Library locations returned by
+    # find_package() and find_library() are absolute paths. Pass these absolute
+    # library file paths directly to the target_link_libraries() command. CMake
+    # will ensure the linker finds them."
+    link_directories (${Boost_LIBRARY_DIRS})
+endif ()
+
+# Load external "gSoap"
+find_package(GSOAP 2.8 REQUIRED)
+message(STATUS "The GSOAP version: ${GSOAP_VERSION}")
+message(STATUS "The GSOAP include directory: ${GSOAP_INCLUDE_DIR}")
+message(STATUS "The GSOAP libraries: ${GSOAP_LIBRARIES}")
+
+
+
+include_directories (${PROJECT_SOURCE_DECLARATION_DIRECTORY} ${GSOAP_INCLUDE_DIR})
+
+# collect all source files to from SmsTrade
+file(GLOB SMSTRADE_SRC_FILES soap/SmsTrade/*.nsmap soap/SmsTrade/*.cpp)
+
+add_executable(${PROJECT_NAME}_SmsTradeGateway TestRunner.cpp SmsTradeGatewayTest.cpp ${SMSTRADE_SRC_FILES}) 
+target_link_libraries(${PROJECT_NAME}_SmsTradeGateway PRIVATE sms_gateway ${Boost_LIBRARIES} ${GSOAP_LIBRARIES} ${GSOAP_SSL_LIBRARIES})
+add_test(NAME ParserUtility COMMAND ${PROJECT_NAME}_SmsTradeGateway)

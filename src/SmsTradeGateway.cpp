@@ -19,6 +19,7 @@
  */
 
 #include "../include/SmsTradeGateway.h"
+#include "../soap/SmsTrade/SmstradeBinding.nsmap" // get the gSOAP-generated namespace bindings
 #include "../soap/SmsTrade/soapSmstradeBindingProxy.h"
 
 const string SmsTradeGateway::name = "smstrade";
@@ -43,12 +44,12 @@ string SmsTradeGateway::GetName() const
     return name;
 }
 
-void SmsTradeGateway::SendMessage(const string& to) // to = Empfänger der Nachricht (Integer, bis zu 16 Zeichen)
+void SmsTradeGateway::SendMessage(const string& to, const string& msg) // to = Empfänger der Nachricht (Integer, bis zu 16 Zeichen)
 {
-    string key = "";         // Persönlicher Identifikationscode (String, bis zu 35 Zeichen)
-    string msg = "Hallo Test";    // Nachrichtentext (String, bis zu 1530 Zeichen)
-    string route = "direct"; // Auswahl der SMS-Route (basic|economy|gold|direct)
-    string from = "FF ALARM";        // Absenderkennung der SMS (String, bis zu 11 Zeichen; Integer, bis zu 16 Zeichen)
+    string key = "9VUtGMBbe151aaf4E38BNnp";         // Persönlicher Identifikationscode (String, bis zu 35 Zeichen)
+    //msg = "Hallo Test";                             // Nachrichtentext (String, bis zu 1530 Zeichen)
+    string route = "direct";                        // Auswahl der SMS-Route (basic|economy|gold|direct)
+    string from = "FF ALARM";                       // Absenderkennung der SMS (String, bis zu 11 Zeichen; Integer, bis zu 16 Zeichen)
     
     SmstradeBindingProxy server;
     server.soap->connect_timeout = 10; // connect within 10 s
@@ -58,7 +59,44 @@ void SmsTradeGateway::SendMessage(const string& to) // to = Empfänger der Nachr
     try
     {
         string setOptionalParamResponse;
+        
+        // Aktiviert den Debugmodus. SMS werden nicht versendet und nicht berechnet
         int result = server.setOptionalParam("debug", "1", setOptionalParamResponse);
+        if(result != SOAP_OK)
+        {
+            server.soap_stream_fault(std::cerr);
+        }
+        
+        // Aktiviert die Rückgabe der Message ID
+        result = server.setOptionalParam("message_id", "1", setOptionalParamResponse);
+        if(result != SOAP_OK)
+        {
+            server.soap_stream_fault(std::cerr);
+        }
+        
+        // Aktiviert die Rückgabe der SMS Anzahl
+        result = server.setOptionalParam("count", "1", setOptionalParamResponse);
+        if(result != SOAP_OK)
+        {
+            server.soap_stream_fault(std::cerr);
+        }
+        
+        // Aktiviert den Empfang eines Versandberichtes für diese SMS
+        result = server.setOptionalParam("dlr", "1", setOptionalParamResponse);
+        if(result != SOAP_OK)
+        {
+            server.soap_stream_fault(std::cerr);
+        }
+        
+        // Zeichenkodierung der Parameter "message" und "from"
+        result = server.setOptionalParam("charset", "UTF-8", setOptionalParamResponse);
+        if(result != SOAP_OK)
+        {
+            server.soap_stream_fault(std::cerr);
+        }
+        
+        // Typ der Nachricht: flash, unicode, binary, voice
+        result = server.setOptionalParam("messagetype", "flash", setOptionalParamResponse);
         if(result != SOAP_OK)
         {
             server.soap_stream_fault(std::cerr);

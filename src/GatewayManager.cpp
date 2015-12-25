@@ -36,7 +36,9 @@ const set<string> GatewayManager::GetPossibleGatewayNames() const
     return GatewayFactory::GetInstance().GetAvailableGatewayNames();
 }
     
-void GatewayManager::SendMessage(std::string gateway, std::string distributionList)
+void GatewayManager::SendMessage(std::string gateway, std::string distributionList, std::string msg)
 {
+    msg = "Hallo Test";                             // Nachrichtentext (String, bis zu 1530 Zeichen)
     
+    GatewayFactory::GetInstance().GetGateway("gateway").get()->SendMessage(distributionList, msg);
 }

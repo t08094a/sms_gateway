@@ -6,4 +6,5 @@ rm *.xml *.nsmap *.h *.cpp
  
 wsdl2h -o SmsTradeQuery.h https://gateway.smstrade.de/soap/index.php?WSDL
 
-soapcpp2 -j -CL -I/usr/share/gsoap/import/ SmsTradeQuery.h
+#soapcpp2 -j -CL -I/usr/share/gsoap/import/ -n -pSmsTrade SmsTradeQuery.h
+soapcpp2 -j -CLx -I/usr/share/gsoap/import/ SmsTradeQuery.h

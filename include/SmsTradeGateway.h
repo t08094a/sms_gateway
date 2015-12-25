@@ -82,7 +82,7 @@ public:
     static const string GetGatewayName();
     string GetName() const;
     
-    void SendMessage( const string& to );
+    void SendMessage( const string& to, const std::string& msg );
 };
 
 #endif // SMSTRADEGATEWAY_H

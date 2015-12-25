@@ -68,17 +68,17 @@ include_directories (${PROJECT_SOURCE_DECLARATION_DIRECTORY} ${GSOAP_INCLUDE_DIR
 include_directories(tests)
 
 # collect all *.cpp files to SRC_FILES
-file(GLOB SRC_FILES soap/SmsTrade/*.cpp)
-aux_source_directory(src SRC_FILES)
+file(GLOB SRC_FILES soap/SmsTrade/*.nsmap)
+aux_source_directory(soap/SmsTrade SRC_FILES) # find all source files in ./soap/SmsTrade/
+aux_source_directory(src SRC_FILES)           # find all source files in ./src/
 
 # collect all *.h files to SRC_FILES
-file(GLOB HEADER_FILES soap/SmsTrade/*.h)
-aux_source_directory(include HEADER_FILES)
-
-add_library(${PROJECT_NAME} SHARED ${SRC_FILES}) # find all source files in ./src/
+file(GLOB HEADER_FILES include/*.h soap/SmsTrade/*.h)
 
 message(STATUS "Source files: ${SRC_FILES}")
 message(STATUS "Header files: ${HEADER_FILES}")
+
+add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 
 #exe install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
@@ -86,4 +86,4 @@ install(FILES ${HEADER_FILES} DESTINATION include)
 
 add_subdirectory(tests)
 
-target_link_libraries (${PROJECT_NAME} ${Boost_LIBRARIES} ${GSOAP_LIBRARIES})
+target_link_libraries (${PROJECT_NAME} ${Boost_LIBRARIES} ${GSOAP_LIBRARIES} ${GSOAP_SSL_LIBRARIES})
