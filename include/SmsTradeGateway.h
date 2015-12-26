@@ -21,7 +21,9 @@
 #ifndef SMSTRADEGATEWAY_H
 #define SMSTRADEGATEWAY_H
 
+#include <map>
 #include "ISmsGateway.h"
+#include "soapSmstradeBindingProxy.h"
 
 using namespace std;
 
@@ -75,6 +77,10 @@ class SmsTradeGateway : public ISmsGateway
 private:
     static const string name;
     
+    void InitializeProxy(SmstradeBindingProxy& server);
+    void SetParameter(SmstradeBindingProxy& server, const string& parameterName, const string& value);
+    void SendMessage(SmstradeBindingProxy& server, const string& to, const string& msg);
+    
 public:
     SmsTradeGateway();
     ~SmsTradeGateway();
@@ -82,7 +88,8 @@ public:
     static const string GetGatewayName();
     string GetName() const;
     
-    void SendMessage( const string& to, const std::string& msg );
+    void SendMessage( const string& to, const string& msg );
+    void SendMessage( const string& to, const string& msg, const map< string, string >& options );
 };
 
 #endif // SMSTRADEGATEWAY_H
