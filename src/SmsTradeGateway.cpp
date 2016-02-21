@@ -20,13 +20,16 @@
 
 #include "SmsTradeGateway.h"
 #include "SmstradeBinding.nsmap" // get the gSOAP-generated namespace bindings
+#include "ConfigReader.h"
+#include <iostream>
+#include <fstream>
 #include <stdsoap2.h>
 
-const string SmsTradeGateway::name = "smstrade";
+const string SmsTradeGateway::name = "SmsTrade";
 
-SmsTradeGateway::SmsTradeGateway()
+SmsTradeGateway::SmsTradeGateway() : key(), route("direct"), from("FF Alarm")
 {
-    // nop
+    InitializeFromConfig();
 }
 
 SmsTradeGateway::~SmsTradeGateway()
@@ -68,16 +71,12 @@ void SmsTradeGateway::SendMessage(const string& to, const string& msg, const map
     }
     
     SendMessage(server, to, msg);
-    
+        
     server.destroy();
 }
 
 void SmsTradeGateway::SendMessage(SmstradeBindingProxy& server, const string& to, const string& msg)
 {
-    string key = "9VUtGMBbe151aaf4E38BNnp";         // Persönlicher Identifikationscode (String, bis zu 35 Zeichen)
-    string route = "direct";                        // Auswahl der SMS-Route (basic|economy|gold|direct)
-    string from = "FF ALARM";                       // Absenderkennung der SMS (String, bis zu 11 Zeichen; Integer, bis zu 16 Zeichen)
-    
     struct ns1__sendSMSResponse returnData;
         
     // returns error code or SOAP_OK
@@ -86,6 +85,10 @@ void SmsTradeGateway::SendMessage(SmstradeBindingProxy& server, const string& to
     {
         server.soap_stream_fault(std::cerr);
     }
+    else
+    {
+        // TODO: returnData auswerten
+    }
 }
 
 void SmsTradeGateway::InitializeProxy(SmstradeBindingProxy& server)
@@ -93,10 +96,10 @@ void SmsTradeGateway::InitializeProxy(SmstradeBindingProxy& server)
     server.soap->connect_timeout = 10; // connect within 10 s
     server.soap->send_timeout = 5;     // send timeout is 5s
     server.soap->recv_timeout = 5;     // receive timeout is 5s
-    
+    soap
     soap_ssl_init();
     
-    int result = soap_ssl_client_context(&(*server.soap), SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL); // SOAP_SSL_DEFAULT
+    int result = soap_ssl_client_context(&(*server.soap), SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL); // SOAP_SSL_DEFAULT besser: SOAP_SSL_CLIENT
     
     if(result)
     {
@@ -113,4 +116,21 @@ void SmsTradeGateway::SetParameter(SmstradeBindingProxy& server, const string& p
     {
         server.soap_stream_fault(std::cerr);
     }
+}
+
+void SmsTradeGateway::InitializeFromConfig()
+{
+/*
+==========
+config.ini
+==========
+[SmsTrade]
+Key = 9VUtGMBbe151aaf4E38BNnp
+Route = direct
+From = FF Alarm
+*/
+    
+    key = ConfigReader::GetInstance().Get("SmsTrade.Key");
+    route = ConfigReader::GetInstance().Get("SmsTrade.Route");
+    from = ConfigReader::GetInstance().Get("SmsTrade.From");
 }

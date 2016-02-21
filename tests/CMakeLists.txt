@@ -68,3 +68,8 @@ message(STATUS "Source files: ${SMSTRADE_SRC_FILES}")
 add_executable(${PROJECT_NAME}_SmsTradeGateway TestRunner.cpp SmsTradeGatewayTest.cpp ${SMSTRADE_SRC_FILES}) 
 target_link_libraries(${PROJECT_NAME}_SmsTradeGateway PRIVATE sms_gateway ${Boost_LIBRARIES} ${GSOAP_SSL_LIBRARIES}) # ${GSOAP_LIBRARIES} 
 add_test(NAME SmsTradeGateway COMMAND ${PROJECT_NAME}_SmsTradeGateway)
+
+add_executable(${PROJECT_NAME}_ConfigReader TestRunner.cpp ConfigReaderTest.cpp ${SMSTRADE_SRC_FILES}) 
+target_link_libraries(${PROJECT_NAME}_ConfigReader PRIVATE sms_gateway ${Boost_LIBRARIES} ${GSOAP_SSL_LIBRARIES}) # ${GSOAP_LIBRARIES} 
+add_test(NAME ConfigReader COMMAND ${PROJECT_NAME}_ConfigReader)
+

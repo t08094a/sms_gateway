@@ -10,7 +10,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE( GetNameReturnsSmstrade )
 {
-    string expected = "smstrade";
+    string expected = "SmsTrade";
     
     SmsTradeGateway gateway;
     string name = gateway.GetName();
@@ -20,13 +20,15 @@ BOOST_AUTO_TEST_CASE( GetNameReturnsSmstrade )
 
 BOOST_AUTO_TEST_CASE( GetGatewayNameReturnsSmstrade )
 {
-    string expected = "smstrade";
+    string expected = "SmsTrade";
     
     BOOST_CHECK(expected == SmsTradeGateway::GetGatewayName());
 }
 
 BOOST_AUTO_TEST_CASE( SendMessage )
 {
+    // TODO: Debugmodus aktuell nicht möglich -> es wird immer eine SMS gesandt
+    /*
     string to = "01749441938"; //"Alle";
     string msg = "Hello World";
     
@@ -40,4 +42,5 @@ BOOST_AUTO_TEST_CASE( SendMessage )
     SmsTradeGateway gateway;
     
     gateway.SendMessage(to, msg, options);
+    */
 }
