@@ -22,6 +22,8 @@
 #define SMSTRADEURL_H
 
 #include "ISmsGateway.h"
+#include <map>
+#include <boost/asio.hpp>
 
 using namespace std;
 
@@ -29,12 +31,16 @@ class SmsTradeUrl : public ISmsGateway
 {
 private:
     static const string name;
+    boost::asio::io_service io_service;
+    string gateway;
     string key;        // Persönlicher Identifikationscode (String, bis zu 35 Zeichen)
     string route;      // Auswahl der SMS-Route (basic|economy|gold|direct)
     string from;       // Absenderkennung der SMS (String, bis zu 11 Zeichen; Integer, bis zu 16 Zeichen)
     
-    void SendMessage(SmstradeBindingProxy& server, const string& to, const string& msg);
     void InitializeFromConfig();
+    string CreateParameterString( const string& msg, const string& receivers );
+    string UrlEncode(const string& input);
+    void _io_service();
     
 public:
     SmsTradeUrl();
@@ -46,7 +52,7 @@ public:
     
     SmsTradeUrl& operator= ( const SmsTradeUrl& other );
     
-    void SendMessage( const string& to, const string& msg );
+    void SendMessage( const string& receivers, const string& msg );
     void SendMessage( const string& to, const string& msg, const map< string, string >& options );
 };
 
